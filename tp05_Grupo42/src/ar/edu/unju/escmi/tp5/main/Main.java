@@ -1,13 +1,14 @@
 package ar.edu.unju.escmi.tp5.main;
 
 import ar.edu.unju.escmi.tp5.collections.LibroCollection;
+import ar.edu.unju.escmi.tp5.collections.UsuarioCollection;
+import ar.edu.unju.escmi.tp5.dominio.Alumno;
+import ar.edu.unju.escmi.tp5.dominio.Bibliotecario;
 import ar.edu.unju.escmi.tp5.dominio.Libro;
-import ar.edu.unju.escmi.tp5.exceptions.LibroNoDisponibleException;
 import ar.edu.unju.escmi.tp5.exceptions.LibroNoEncontradoException;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.InputMismatchException;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Main {
@@ -31,7 +32,7 @@ public class Main {
             System.out.print("Seleccione una opción: ");
             try {
                 opcion = scanner.nextInt();
-                scanner.nextLine(); // Consumir el salto de línea restante
+                scanner.nextLine();
 
                 switch (opcion) {
                     case 1:
@@ -39,11 +40,11 @@ public class Main {
                         break;
 
                     case 2:
-                        registrarLibro(scanner);
+                        registrarUsuario(scanner);
                         break;
 
                     case 3:
-                        realizarPrestamo(scanner); // Pasamos el scanner como parámetro
+                        realizarPrestamo(scanner); 
                         break;
 
                     case 4:
@@ -70,8 +71,65 @@ public class Main {
 
         scanner.close();
     }
+    
+    public static void registrarUsuario(Scanner scanner) {
+        try {
+            System.out.println("Seleccione el tipo de usuario a registrar:");
+            System.out.println("1. Alumno");
+            System.out.println("2. Bibliotecario");
 
-    // Método para registrar un libro
+
+            int opcion = scanner.nextInt();
+            scanner.nextLine(); 
+
+            System.out.print("Ingrese ID: ");
+            int id = scanner.nextInt();
+            scanner.nextLine();
+
+            System.out.print("Ingrese Nombre: ");
+            String nombre = scanner.nextLine();
+
+            System.out.print("Ingrese Apellido: ");
+            String apellido = scanner.nextLine();
+
+            System.out.print("Ingrese Email: ");
+            String email = scanner.nextLine();
+            
+            if (opcion == 1) {
+                System.out.print("Ingrese Curso: ");
+                String curso = scanner.nextLine();
+
+                System.out.print("Ingrese Número de Libreta: ");
+                int numeroDeLibreta = scanner.nextInt();
+
+                Alumno alumno = new Alumno(id, nombre, apellido, email, curso, numeroDeLibreta);
+                UsuarioCollection.agregarUsuario(alumno);
+
+            }  else if (opcion == 2) {
+                System.out.print("Ingrese Legajo: ");
+                String legajo = scanner.nextLine();
+
+                Bibliotecario bibliotecario = new Bibliotecario(id, nombre, apellido, email, legajo);
+                UsuarioCollection.agregarUsuario(bibliotecario);
+            } else {
+                System.out.println("Opción no válida.");
+            }
+
+            System.out.println("Usuario registrado con éxito.");
+
+        } catch (InputMismatchException e) {
+            System.out.println("Error: Entrada no válida. Por favor, ingrese los datos correctos.");
+            scanner.nextLine();
+        } catch (NoSuchElementException e) {
+            System.out.println("Error: Entrada no recibida correctamente.");
+        } catch (IllegalStateException e) {
+            System.out.println("Error: Scanner ya ha sido cerrado.");
+        } catch (Exception e) {
+            System.out.println("Ocurrió un error inesperado: " + e.getMessage());
+        }
+    }
+    
+
     public static void registrarLibro(Scanner scanner) {
         System.out.println("=== Registrar Libro ===");
         Libro nuevoLibro = new Libro();
