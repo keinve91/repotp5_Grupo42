@@ -1,11 +1,9 @@
 package ar.edu.unju.escmi.tp5.main;
 
-import ar.edu.unju.escmi.tp5.collections.LibroCollection;
-import ar.edu.unju.escmi.tp5.collections.UsuarioCollection;
-import ar.edu.unju.escmi.tp5.dominio.Alumno;
-import ar.edu.unju.escmi.tp5.dominio.Bibliotecario;
-import ar.edu.unju.escmi.tp5.dominio.Libro;
+import ar.edu.unju.escmi.tp5.collections.*;
+import ar.edu.unju.escmi.tp5.dominio.*;
 import ar.edu.unju.escmi.tp5.exceptions.LibroNoEncontradoException;
+import ar.edu.unju.escmi.tp5.exceptions.UsuarioNoRegistradoException;
 
 import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
@@ -48,7 +46,7 @@ public class Main {
                         break;
 
                     case 4:
-                        registrarLibro(scanner);
+                        registrarDevolucion(scanner);
                         break;
 
                     case 5:
@@ -129,6 +127,10 @@ public class Main {
         }
     }
     
+    
+    
+    
+    
 
     public static void registrarLibro(Scanner scanner) {
         System.out.println("=== Registrar Libro ===");
@@ -152,6 +154,11 @@ public class Main {
         System.out.println("Libro registrado exitosamente.");
     }
 
+    
+    
+    
+    
+    
     public static void listarLibros() {
         System.out.println("=== Listar Libros Disponibles ===");
         for (Libro libro : LibroCollection.libros) {
@@ -163,16 +170,80 @@ public class Main {
             }
         }
     }
-
     public static void realizarPrestamo(Scanner scanner) {
-        int codigo;
-        System.out.println("Ingrese el codigo del libro:");
-        codigo = scanner.nextInt();
+        System.out.println("=== Realizar Préstamo ===");
         try {
-            Libro libro = LibroCollection.buscarLibro(codigo);
+            System.out.print("Ingrese el ID del préstamo: ");
+            int idPrestamo = scanner.nextInt();
+            scanner.nextLine(); 
+
+            System.out.print("Ingrese el código del libro a prestar: ");
+            int codigoLibro = scanner.nextInt();
+            scanner.nextLine();
+
+            Libro libro = LibroCollection.buscarLibro(codigoLibro);
             System.out.println("Libro encontrado: " + libro.getTitulo());
+
+
+            System.out.print("Ingrese ID del usuario que realiza el préstamo: ");
+            int idUsuario = scanner.nextInt();
+            scanner.nextLine();  
+
+            Usuario usuario = UsuarioCollection.buscarUsuarioPorId(idUsuario);
+            if (usuario == null) {
+                throw new UsuarioNoRegistradoException("Error: Usuario no registrado.");
+            }
+            System.out.println("Usuario encontrado: " + usuario.getNombre());
+
+
+            System.out.print("Ingrese la fecha de préstamo (dd/MM/yyyy): ");
+            String fechaPrestamoStr = scanner.nextLine();
+
+            PrestamoCollection.realizarPrestamo(idPrestamo, codigoLibro, usuario, fechaPrestamoStr);
+
         } catch (LibroNoEncontradoException e) {
+            System.out.println("Error: " + e.getMessage());
+        } catch (UsuarioNoRegistradoException e) {
             System.out.println(e.getMessage());
+        } catch (IllegalArgumentException e) {
+            System.out.println("Error: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
         }
     }
+
+    public static void registrarDevolucion(Scanner scanner) {
+        System.out.println("=== Registrar Devolución ===");
+        
+        System.out.println("=== Lista de Préstamos Activos ===");
+        PrestamoCollection.listarPrestamos(); 
+
+        try {
+
+            System.out.print("Ingrese el ID del préstamo: ");
+            int idPrestamo = scanner.nextInt();
+            scanner.nextLine(); 
+
+
+            System.out.print("Ingrese la fecha de devolución (dd/MM/yyyy): ");
+            String fechaDevolucionStr = scanner.nextLine();
+
+            try {
+            } catch (IllegalArgumentException e) {
+
+                System.out.println("Error: " + e.getMessage());
+                return;  
+            }
+
+            PrestamoCollection.registrarDevolucion(idPrestamo, fechaDevolucionStr);
+
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+
+
+   
+
 }
