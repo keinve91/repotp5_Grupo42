@@ -1,0 +1,49 @@
+1. Historia de usuario: Registrar libro
+   - Como bibliotecario,
+   - quiero registrar un nuevo libro en el sistema,
+   - para poder gestionar su préstamo a los alumnos.
+   
+   Criterios de Aceptación:
+   - El bibliotecario puede ingresar los datos del libro: ID, título, autor, ISBN.
+   - El sistema debe permitir que el estado del libro se registre como "disponible".
+   - Al registrar el libro, se debe mostrar un mensaje de confirmación.
+
+2. Historia de usuario: Listar libros disponibles
+   - Como alumno o bibliotecario,
+   - quiero ver la lista de libros disponibles en la biblioteca,
+   - para poder elegir un libro que deseo prestar.
+
+   Criterios de Aceptación:
+   - El sistema debe mostrar todos los libros que están disponibles (estado = true).
+   - Cada libro debe mostrar su ID, título, autor, ISBN y estado.
+   - La lista de libros debe ser clara y legible.
+
+3. Historia de usuario: Realizar préstamo de libro
+   - Como alumno,
+   - quiero solicitar el préstamo de un libro,
+   - para poder utilizarlo durante un periodo de tiempo determinado.
+   
+   Criterios de Aceptación:
+   - El alumno debe poder ingresar el ID del libro que desea prestar.
+   - Si el libro está disponible, se debe actualizar su estado a "no disponible".
+   - El sistema debe mostrar un mensaje confirmando que el libro ha sido prestado.
+   - Si el libro no está disponible, se debe mostrar un mensaje de error.
+
+4. Historia de usuario: Consultar libro por ID
+   - Como alumno,
+   - quiero buscar un libro por su ID,
+   - para saber si está disponible para préstamo.
+
+   Criterios de Aceptación:
+   - El sistema debe permitir al usuario ingresar el ID del libro para buscar.
+   - Si el libro existe, se debe mostrar su título y estado.
+   - Si el libro no se encuentra, el sistema debe mostrar un mensaje de error indicando que no fue encontrado.
+
+5. Historia de usuario: Manejo de excepciones
+   - Como usuario,
+   - quiero recibir mensajes claros cuando ocurra un error,
+   - para entender mejor lo que está sucediendo en el sistema.
+
+   Criterios de Aceptación:
+   - Si el usuario intenta prestar un libro que no está disponible, se debe lanzar `LibroNoDisponibleException` y mostrar un mensaje claro.
+   - Si el usuario intenta buscar un libro que no existe, se debe lanzar `LibroNoEncontradoException` y mostrar un mensaje claro.
