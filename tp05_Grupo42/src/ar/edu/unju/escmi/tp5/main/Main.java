@@ -12,9 +12,8 @@ import java.util.Scanner;
 
 public class Main {
 
-
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+    	Scanner scanner = new Scanner(System.in);
         int opcion;
 
         LibroCollection.precargarLibros();
@@ -27,39 +26,46 @@ public class Main {
             System.out.println("4 - Registrar devolución de libro");
             System.out.println("5 - Listar libros disponibles");
             System.out.println("6 - Salir");
+            System.out.println("====================================================");
+
             System.out.print("Seleccione una opción: ");
-            opcion = scanner.nextInt();
-            scanner.nextLine(); // Consumir la línea en blanco
+            try {
+                opcion = scanner.nextInt();
+                scanner.nextLine(); // Consumir el salto de línea restante
 
-            switch (opcion) {
-                case 1:
-                    registrarLibro(scanner);
-                    break;
+                switch (opcion) {
+                    case 1:
+                        registrarLibro(scanner);
+                        break;
 
-                case 2:
-                    registrarLibro(scanner);
-                    break;
+                    case 2:
+                        registrarLibro(scanner);
+                        break;
 
-                case 3:
-                    registrarLibro(scanner);
-                    break;
+                    case 3:
+                        realizarPrestamo(scanner); // Pasamos el scanner como parámetro
+                        break;
 
-                case 4:
-                    registrarLibro(scanner);
-                    break;
+                    case 4:
+                        registrarLibro(scanner);
+                        break;
 
-                case 5:
-                    listarLibros();
-                    break;
+                    case 5:
+                        listarLibros();
+                        break;
 
-                case 6:
-                    System.out.println("Saliendo del sistema...");
-                    break;
+                    case 6:
+                        System.out.println("Saliendo del sistema...");
+                        break;
 
-                default:
-                    System.out.println("Opción inválida, intente nuevamente.");
+                    default:
+                        System.out.println("Opcion invalida, intente nuevamente.");
+                }
+            } catch (Exception e) {
+                System.out.println("Ingrese un numero!!!!");
+                scanner.nextLine(); 
+                opcion = -1; 
             }
-
         } while (opcion != 6);
 
         scanner.close();
@@ -87,17 +93,28 @@ public class Main {
         LibroCollection.agregarLibro(nuevoLibro);
         System.out.println("Libro registrado exitosamente.");
     }
- 
+
     public static void listarLibros() {
         System.out.println("=== Listar Libros Disponibles ===");
         for (Libro libro : LibroCollection.libros) {
             if (libro.estado) {
+                System.out.println(" ");
                 libro.mostrarDatos();
-                System.out.println("*****										*****");
+                System.out.println("*****************************************************************************");
 
             }
         }
     }
 
-   
+    public static void realizarPrestamo(Scanner scanner) {
+        int codigo;
+        System.out.println("Ingrese el codigo del libro:");
+        codigo = scanner.nextInt();
+        try {
+            Libro libro = LibroCollection.buscarLibro(codigo);
+            System.out.println("Libro encontrado: " + libro.getTitulo());
+        } catch (LibroNoEncontradoException e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
