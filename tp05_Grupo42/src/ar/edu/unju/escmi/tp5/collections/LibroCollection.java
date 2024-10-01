@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ar.edu.unju.escmi.tp5.dominio.Libro;
-import ar.edu.unju.escmi.tp5.exceptions.LibroNoDisponibleException;
 import ar.edu.unju.escmi.tp5.exceptions.LibroNoEncontradoException;
 
 public class LibroCollection {
@@ -31,13 +30,4 @@ public class LibroCollection {
 		}
 		throw new LibroNoEncontradoException("El libro con codigo " + id + " no fue encontrado..");
 	}
-	public static void prestarLibro(int id) throws LibroNoEncontradoException, LibroNoDisponibleException {
-        Libro libro = buscarLibro(id);
-        if (libro.estaDisponible()) {
-            libro.setDisponible(false);
-            System.out.println("El libro " + libro.getTitulo() + " ha sido prestado.");
-        } else {
-            throw new LibroNoDisponibleException("El libro " + libro.getTitulo() + " no está disponible.");
-        }
-    }
 }
